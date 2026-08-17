@@ -223,3 +223,137 @@ h1, h2, h3 {
     padding: 15px 30px;
   }
 }
+
+/* --- Computer Basics Module --- */
+.basics-container {
+  max-width: 900px;
+  width: 95%;
+  margin: 0 auto;
+  padding: 80px 20px 40px; /* space for back btn */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+/* Flip Card 3D */
+.flip-card {
+  background-color: transparent;
+  width: 200px;
+  height: 250px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border: 4px solid #fff;
+}
+
+.flip-card-front {
+  background-color: var(--button-yellow);
+  color: var(--text-dark);
+}
+
+.flip-card-front .emoji {
+  font-size: 5rem;
+  margin-bottom: 10px;
+}
+
+.flip-card-front h3 {
+  font-family: 'Fredoka One', cursive;
+  color: var(--text-dark);
+  text-shadow: none;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.flip-card-back {
+  background-color: var(--grass-green);
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flip-card-back p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Tips Section */
+.tips-section {
+  background: rgba(255, 255, 255, 0.4);
+  padding: 30px;
+  border-radius: 30px;
+  border: 4px dashed #fff;
+}
+
+.tips-section h2 {
+  color: #FF4500;
+  text-shadow: 2px 2px 0px #fff;
+  font-size: 2.5rem;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.tip-card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+}
+
+.tip-card .tip-emoji {
+  font-size: 3rem;
+}
+
+.tip-card p {
+  font-weight: 700;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+}
+
+.btn-back-fixed {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
