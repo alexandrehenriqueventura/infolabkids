@@ -82,6 +82,10 @@ document.addEventListener('keydown', (e) => {
     
     targetEl.classList.add('pop-animation');
     playPopSound();
+    
+    if (score === 20 && typeof unlockStar === 'function') {
+      unlockStar('keyboard');
+    }
 
     setTimeout(() => {
       targetEl.remove();

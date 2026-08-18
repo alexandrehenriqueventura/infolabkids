@@ -81,6 +81,7 @@ trashBin.addEventListener('drop', (e) => {
 chest.addEventListener('dblclick', () => {
   playTadaSound();
   modalTreasure.style.display = 'block';
+  if (typeof unlockStar === 'function') unlockStar('desktop');
 });
 
 // Para dispositivos Touch (O duplo clique nativo às vezes não pega bem em touch, mas vamos simular)
@@ -92,6 +93,7 @@ chest.addEventListener('touchend', (e) => {
     e.preventDefault();
     playTadaSound();
     modalTreasure.style.display = 'block';
+    if (typeof unlockStar === 'function') unlockStar('desktop');
   }
   lastTap = currentTime;
 });

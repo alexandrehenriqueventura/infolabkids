@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         matchesCount++;
         
         if (matchesCount === 4) {
+          if (typeof unlockStar === 'function') unlockStar('match');
           showCongrats();
         }
       } else {

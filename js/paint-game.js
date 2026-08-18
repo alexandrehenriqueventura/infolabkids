@@ -27,6 +27,9 @@ function startDrawing(e) {
 }
 
 function stopDrawing() {
+  if (isDrawing && typeof unlockStar === 'function') {
+    unlockStar('paint');
+  }
   isDrawing = false;
   ctx.beginPath(); // Reseta o caminho para não ligar pontos
 }

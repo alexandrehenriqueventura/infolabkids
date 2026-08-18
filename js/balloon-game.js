@@ -60,6 +60,10 @@ function popBalloon(event) {
 
   // Toca um som curto e simples sintetizado
   playPopSound();
+  
+  if (score === 10 && typeof unlockStar === 'function') {
+    unlockStar('mouse');
+  }
 
   // Remove do DOM após a animação
   setTimeout(() => {

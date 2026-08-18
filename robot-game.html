@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>O Caminho do Robô - InfoLab Kids</title>
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <style>
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      grid-template-rows: repeat(4, 80px);
+      gap: 5px;
+      background: #8B4513;
+      padding: 10px;
+      border-radius: 15px;
+      border: 8px solid #5C2E0B;
+      margin: 20px auto;
+      width: max-content;
+    }
+    .cell {
+      background: #DEB887;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5rem;
+      position: relative;
+    }
+    
+    .robot {
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .battery {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+    .control-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border: 4px solid var(--button-blue);
+    }
+    .arrow-btn {
+      background: var(--button-yellow);
+      border: 4px solid #fff;
+      border-radius: 15px;
+      width: 60px;
+      height: 60px;
+      font-size: 2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #CC9900;
+      margin: 5px;
+    }
+    .arrow-btn:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+    
+    .queue-container {
+      margin-top: 20px;
+      min-height: 50px;
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+      border: 2px dashed #ccc;
+    }
+    .queue-item {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+    }
+    .queue-item.active {
+      background: var(--button-yellow);
+      border-color: #CC9900;
+    }
+
+    .action-btns {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body class="game-container">
+
+  <a href="menu.html" class="btn-kid btn-secondary btn-back">⬅ Voltar</a>
+
+  <div style="text-align: center; margin-top: 10px;">
+    <h1 class="logo-title" style="margin: 0; font-size: 2.2rem;">O Caminho do Robô 🤖</h1>
+    <p style="font-size: 1.1rem; font-weight: 700; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Programe os passos do robô para ele chegar na bateria (🔋).</p>
+  </div>
+
+  <div class="game-board" id="board">
+    <!-- As 16 celulas (4x4) serao geradas no JS -->
+  </div>
+
+  <div class="control-panel">
+    <div class="arrows">
+      <button class="arrow-btn" data-dir="UP">⬆️</button>
+      <br>
+      <button class="arrow-btn" data-dir="LEFT">⬅️</button>
+      <button class="arrow-btn" data-dir="DOWN">⬇️</button>
+      <button class="arrow-btn" data-dir="RIGHT">➡️</button>
+    </div>
+    
+    <div class="queue-container" id="queue-display">
+      <span style="color: #999; font-family: 'Fredoka One';">Sua lista de comandos aparecerá aqui...</span>
+    </div>
+    
+    <div class="action-btns">
+      <button class="btn-kid" id="btn-play" style="padding: 15px 30px; font-size: 1.5rem;">▶️ Executar</button>
+      <button class="btn-kid btn-secondary" id="btn-clear" style="padding: 15px 30px; font-size: 1.5rem;">Limpar</button>
+    </div>
+  </div>
+
+  <div class="grass-footer" style="position: fixed; bottom: 0; width: 100%;"></div>
+
+  <script src="js/progress.js"></script>
+  <script src="js/robot-game.js"></script>
+</body>
+</html>

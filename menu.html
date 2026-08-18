@@ -12,6 +12,10 @@
     <h1 class="logo-title">Bem-vindo ao InfoLab Kids! 🚀</h1>
     <p style="font-size: 1.3rem; margin-bottom: 30px; font-weight: 700;">Aprenda a usar o computador brincando!</p>
 
+    <div id="stars-panel" style="background: rgba(255,255,255,0.8); border-radius: 20px; padding: 10px; margin-bottom: 20px; color: var(--text-dark); border: 3px solid var(--button-yellow); display: inline-block;">
+      <h3>Suas Estrelas: 0 ⭐</h3>
+    </div>
+    
     <div class="menu-options">
       <a href="computer-basics.html" class="btn-kid">
         💻 Conhecendo o Computador
@@ -37,6 +41,14 @@
         🧹 Faxina no Computador (Duplo Clique)
       </a>
 
+      <a href="browser-game.html" class="btn-kid" style="background-color: #9b59b6; box-shadow: 0 8px 0 #8e44ad;">
+        🌐 O Navegador Mágico (A Internet)
+      </a>
+
+      <a href="robot-game.html" class="btn-kid" style="background-color: #34495e; box-shadow: 0 8px 0 #2c3e50;">
+        🤖 Caminho do Robô (Lógica)
+      </a>
+
       <a href="safety-tips.html" class="btn-kid btn-secondary">
         🛡️ Dicas de Segurança
       </a>
@@ -44,6 +56,11 @@
   </div>
 
   <div class="grass-footer"></div>
-
+  <script src="js/progress.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStarsPanel();
+    });
+  </script>
 </body>
 </html>

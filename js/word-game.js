@@ -87,6 +87,8 @@ document.addEventListener('keydown', (e) => {
     } else {
       // Palavra concluída
       playTrainSound();
+      if (typeof unlockStar === 'function') unlockStar('word');
+      
       trainContainer.style.transform = 'translateX(150vw)'; // O trem vai embora
       
       setTimeout(() => {
