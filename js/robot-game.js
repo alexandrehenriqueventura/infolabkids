@@ -116,8 +116,14 @@ function loadLevel(index) {
   levelHeader.textContent = `Fase ${index + 1} de 15: ${currentLevel.name}`;
   
   const theme = THEMES[currentLevel.theme];
-  board.style.gridTemplateColumns = `repeat(${currentLevel.size}, 60px)`;
-  board.style.gridTemplateRows = `repeat(${currentLevel.size}, 60px)`;
+  
+  // Calcula o tamanho da célula para não estourar a tela nas fases grandes
+  let cellSize = 60;
+  if (currentLevel.size === 5) cellSize = 50;
+  if (currentLevel.size === 6) cellSize = 42;
+  
+  board.style.gridTemplateColumns = `repeat(${currentLevel.size}, ${cellSize}px)`;
+  board.style.gridTemplateRows = `repeat(${currentLevel.size}, ${cellSize}px)`;
   board.style.backgroundColor = theme.bg;
   board.style.borderColor = theme.border;
   
@@ -139,7 +145,10 @@ function renderBoard() {
       const isObs = currentLevel.obstacles.find(o => o.x === x && o.y === y);
       if (isObs) {
         const randomObs = theme.obs[Math.floor(Math.random() * theme.obs.length)];
-        cell.innerHTML = `<div class="obstacle">${randomObs}</div>`;
+        let obsSize = '2.5rem';
+        if (currentLevel.size === 5) obsSize = '2rem';
+        if (currentLevel.size === 6) obsSize = '1.6rem';
+        cell.innerHTML = `<div class="obstacle" style="font-size: ${obsSize};">${randomObs}</div>`;
       }
       
       board.appendChild(cell);
@@ -154,15 +163,19 @@ function updateEntities() {
   
   const theme = THEMES[currentLevel.theme];
   
+  let fontSize = '2.5rem';
+  if (currentLevel.size === 5) fontSize = '2rem';
+  if (currentLevel.size === 6) fontSize = '1.6rem';
+  
   // Desenha Alvo
   const targetCell = document.getElementById(`cell-${currentLevel.target.x}-${currentLevel.target.y}`);
   if (targetCell && !targetCell.querySelector('.target-item')) {
-    targetCell.innerHTML += `<div class="target-item" style="font-size:2.5rem; position:absolute;">${theme.target}</div>`;
+    targetCell.innerHTML += `<div class="target-item" style="font-size:${fontSize}; position:absolute;">${theme.target}</div>`;
   }
   
   // Desenha Robô
   const robCell = document.getElementById(`cell-${robotPos.x}-${robotPos.y}`);
-  if (robCell) robCell.innerHTML += '<div class="robot" style="font-size:2.5rem; position:absolute;">🤖</div>';
+  if (robCell) robCell.innerHTML += `<div class="robot" style="font-size:${fontSize}; position:absolute;">🤖</div>`;
 }
 
 function updateQueueDisplay() {
