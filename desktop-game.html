@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Faxina no Computador - InfoLab Kids</title>
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <style>
+    .desktop-area {
+      background: #87CEEB; /* Azul céu imitando um wallpaper */
+      border: 8px solid white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .icon {
+      width: 80px;
+      height: 100px;
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .icon-img {
+      font-size: 3rem;
+      margin-bottom: 5px;
+      pointer-events: none;
+    }
+    .icon-label {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      pointer-events: none;
+    }
+    
+    .trash-bin {
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: 120px;
+      position: absolute;
+      background: rgba(255,255,255,0.3);
+      border: 4px dashed white;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .trash-bin.hovered {
+      background: rgba(255, 255, 255, 0.6);
+      border-color: var(--button-red);
+    }
+    .trash-bin.success {
+      background: var(--grass-green);
+    }
+    
+    #modal-treasure {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      z-index: 10;
+      animation: pop 0.5s ease-out;
+    }
+  </style>
+</head>
+<body class="game-container">
+
+  <a href="menu.html" class="btn-kid btn-secondary btn-back">⬅ Voltar</a>
+
+  <div style="text-align: center; margin-top: 10px;">
+    <h1 class="logo-title" style="margin: 0; font-size: 2.2rem;">Faxina no Computador 🧹</h1>
+    <p style="font-size: 1.1rem; font-weight: 700; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arrastar o "Lixo" para a Lixeira e dê "Dois Cliques" (Duplo clique) no Baú!</p>
+  </div>
+
+  <div class="desktop-area" id="desktop">
+    
+    <!-- Lixeira -->
+    <div class="trash-bin" id="trash-bin">
+      <div class="icon-img" style="pointer-events: auto;">🗑️</div>
+      <div class="icon-label">Lixeira</div>
+    </div>
+
+    <!-- Baú (Duplo clique) -->
+    <div class="icon" id="chest" style="top: 50px; left: 50px;">
+      <div class="icon-img">🧰</div>
+      <div class="icon-label">Baú Secreto</div>
+    </div>
+
+    <!-- Lixos -->
+    <div class="icon draggable-trash" draggable="true" id="lixo1" style="top: 200px; left: 150px;">
+      <div class="icon-img">📄</div>
+      <div class="icon-label">Lixo 1</div>
+    </div>
+    
+    <div class="icon draggable-trash" draggable="true" id="lixo2" style="top: 100px; left: 400px;">
+      <div class="icon-img">📄</div>
+      <div class="icon-label">Lixo 2</div>
+    </div>
+
+    <div class="icon draggable-trash" draggable="true" id="lixo3" style="top: 300px; left: 300px;">
+      <div class="icon-img">📄</div>
+      <div class="icon-label">Lixo 3</div>
+    </div>
+
+    <!-- Modal do Tesouro -->
+    <div id="modal-treasure">
+      <h2 style="margin:0; font-size: 3rem;">💎👑💎</h2>
+      <h3 style="color: var(--button-blue); font-family: 'Fredoka One', cursive;">Você abriu o Baú!</h3>
+      <p style="font-weight: bold; color: var(--text-dark);">Parabéns! Você aprendeu o Duplo Clique!</p>
+      <button class="btn-kid" onclick="document.getElementById('modal-treasure').style.display='none'">Fechar</button>
+    </div>
+
+  </div>
+
+  <div class="grass-footer" style="position: absolute;"></div>
+
+  <script src="js/desktop-game.js"></script>
+</body>
+</html>
