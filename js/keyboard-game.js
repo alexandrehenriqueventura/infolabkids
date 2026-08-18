@@ -5,7 +5,7 @@ let score = 0;
 let fallingLetters = [];
 let spawnInterval;
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 const colors = [
   '#FF5733', '#33FF57', '#3357FF', '#FF33F5', '#F5FF33', '#00FFFF', '#FF8C00'
 ];
@@ -65,7 +65,7 @@ function update() {
 document.addEventListener('keydown', (e) => {
   const pressedKey = e.key.toUpperCase();
 
-  // Ignorar teclas que não são do alfabeto (A-Z) para não gerar loops desnecessários
+  // Ignorar teclas que não são do alfabeto ou números (A-Z, 0-9) para não gerar loops desnecessários
   if (!alphabet.includes(pressedKey) && pressedKey !== 'Ç') return;
 
   // Procura a primeira letra correspondente que estiver na tela e não estiver estourando
