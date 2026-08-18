@@ -44,9 +44,8 @@ const THEMES = {
   'space': { bg: '#2F4F4F', cellBg: '#708090', border: '#191970', target: '🌟', obs: ['☄️', '🪐', '👾'] }
 };
 
-let currentLevelIndex = (typeof getRobotLevel === 'function') ? getRobotLevel() : 0;
-// Segurança para não estourar o array
-if (currentLevelIndex >= LEVELS.length) currentLevelIndex = 0;
+// Sempre inicia do começo (Fase 1) quando a página é recarregada
+let currentLevelIndex = 0;
 
 let currentLevel;
 let robotPos = { x: 0, y: 0 };
@@ -180,7 +179,7 @@ function updateEntities() {
 
 function updateQueueDisplay() {
   if (commands.length === 0) {
-    queueDisplay.innerHTML = '<span style="color: #999; font-family: \'Fredoka One\';">Sua lista de comandos aparecerá aqui...</span>';
+    queueDisplay.innerHTML = '<span style="color: #999; font-family: \'Fredoka One\';">Sua lista de comandos...</span>';
     return;
   }
   

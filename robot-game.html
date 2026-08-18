@@ -8,20 +8,19 @@
   <style>
     .game-board {
       display: grid;
-      gap: 5px;
-      padding: 10px;
-      border-radius: 15px;
-      border: 8px solid;
-      margin: 20px auto;
+      gap: 3px;
+      padding: 5px;
+      border-radius: 10px;
+      border: 6px solid;
+      margin: 10px auto;
       width: max-content;
       transition: all 0.5s ease;
     }
     .cell {
-      border-radius: 8px;
+      border-radius: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2.5rem;
       position: relative;
     }
     
@@ -33,45 +32,45 @@
       animation: pulse 1.5s infinite;
     }
     .obstacle {
-      font-size: 2.5rem;
+      font-size: inherit;
     }
     @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
     .control-panel {
       background: white;
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
+      border-radius: 15px;
+      padding: 10px 15px;
+      max-width: 500px;
+      margin: 0 auto 20px;
       text-align: center;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       border: 4px solid var(--button-blue);
     }
     .arrow-btn {
       background: var(--button-yellow);
-      border: 4px solid #fff;
-      border-radius: 15px;
-      width: 60px;
-      height: 60px;
-      font-size: 2rem;
+      border: 3px solid #fff;
+      border-radius: 10px;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
       cursor: pointer;
-      box-shadow: 0 4px 0 #CC9900;
-      margin: 5px;
+      box-shadow: 0 3px 0 #CC9900;
+      margin: 2px;
     }
     .arrow-btn:active {
-      transform: translateY(4px);
+      transform: translateY(3px);
       box-shadow: none;
     }
     
     .queue-container {
-      margin-top: 20px;
-      min-height: 50px;
+      margin-top: 10px;
+      min-height: 40px;
       background: #f0f0f0;
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 5px;
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 3px;
       justify-content: center;
       align-items: center;
       border: 2px dashed #ccc;
@@ -79,13 +78,13 @@
     .queue-item {
       background: white;
       border: 2px solid #ccc;
-      border-radius: 8px;
-      width: 30px;
-      height: 30px;
+      border-radius: 5px;
+      width: 25px;
+      height: 25px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
     .queue-item.active {
       background: var(--button-yellow);
@@ -93,18 +92,19 @@
     }
 
     .action-btns {
-      margin-top: 20px;
+      margin-top: 10px;
     }
     
     #level-header {
       background: white;
       color: var(--text-dark);
       display: inline-block;
-      padding: 5px 15px;
-      border-radius: 20px;
+      padding: 3px 10px;
+      border-radius: 15px;
       font-family: 'Fredoka One', cursive;
       border: 3px solid #ccc;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -112,10 +112,9 @@
 
   <a href="menu.html" class="btn-kid btn-secondary btn-back">⬅ Voltar</a>
 
-  <div style="text-align: center; margin-top: 10px;">
-    <h1 class="logo-title" style="margin: 0; font-size: 2.2rem;">O Caminho do Robô 🤖</h1>
+  <div style="text-align: center; margin-top: 5px;">
+    <h1 class="logo-title" style="margin: 0; font-size: 1.8rem; animation: none;">O Caminho do Robô 🤖</h1>
     <div id="level-header">Fase 1 de 15: Fábrica</div>
-    <p style="font-size: 1.1rem; font-weight: 700; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Programe os passos do robô para ele chegar no objetivo!</p>
   </div>
 
   <div class="game-board" id="board">
@@ -132,12 +131,12 @@
     </div>
     
     <div class="queue-container" id="queue-display">
-      <span style="color: #999; font-family: 'Fredoka One';">Sua lista de comandos aparecerá aqui...</span>
+      <span style="color: #999; font-family: 'Fredoka One';">Sua lista de comandos...</span>
     </div>
     
     <div class="action-btns">
-      <button class="btn-kid" id="btn-play" style="padding: 15px 30px; font-size: 1.5rem;">▶️ Executar</button>
-      <button class="btn-kid btn-secondary" id="btn-clear" style="padding: 15px 30px; font-size: 1.5rem;">Limpar</button>
+      <button class="btn-kid" id="btn-play" style="padding: 10px 20px; font-size: 1.2rem;">▶️ Executar</button>
+      <button class="btn-kid btn-secondary" id="btn-clear" style="padding: 10px 20px; font-size: 1.2rem;">Limpar</button>
     </div>
   </div>
 
