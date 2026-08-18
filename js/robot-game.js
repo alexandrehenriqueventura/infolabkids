@@ -5,10 +5,51 @@ const queueDisplay = document.getElementById('queue-display');
 const btnPlay = document.getElementById('btn-play');
 const btnClear = document.getElementById('btn-clear');
 const arrowBtns = document.querySelectorAll('.arrow-btn');
+const levelHeader = document.getElementById('level-header');
+const themeBody = document.getElementById('theme-body');
 
-const GRID_SIZE = 4;
+// Definição das 15 Fases
+const LEVELS = [
+  // MUNDO 1: Fábrica (Tons Laranja/Marrom, Alvo: Bateria)
+  { size: 4, start: {x:0, y:0}, target: {x:3, y:0}, obstacles: [], theme: 'factory', name: 'Fábrica' },
+  { size: 4, start: {x:0, y:0}, target: {x:3, y:3}, obstacles: [{x:2, y:0}], theme: 'factory', name: 'Fábrica' },
+  { size: 4, start: {x:0, y:0}, target: {x:3, y:3}, obstacles: [{x:1, y:0}, {x:1, y:1}, {x:3, y:2}], theme: 'factory', name: 'Fábrica' },
+  
+  // MUNDO 2: Floresta Encantada (Tons Verde, Alvo: Maçã)
+  { size: 5, start: {x:0, y:0}, target: {x:4, y:4}, obstacles: [{x:2, y:2}], theme: 'forest', name: 'Floresta Encantada' },
+  { size: 5, start: {x:0, y:0}, target: {x:4, y:0}, obstacles: [{x:2, y:0}, {x:2, y:1}, {x:2, y:2}], theme: 'forest', name: 'Floresta Encantada' },
+  { size: 5, start: {x:0, y:4}, target: {x:4, y:0}, obstacles: [{x:1, y:3}, {x:2, y:3}, {x:3, y:3}, {x:3, y:2}, {x:3, y:1}], theme: 'forest', name: 'Floresta Encantada' },
+  
+  // MUNDO 3: Fundo do Mar (Tons Azul, Alvo: Tesouro)
+  { size: 5, start: {x:2, y:2}, target: {x:0, y:0}, obstacles: [{x:1, y:1}, {x:1, y:2}, {x:2, y:1}], theme: 'ocean', name: 'Fundo do Mar' },
+  { size: 5, start: {x:0, y:2}, target: {x:4, y:2}, obstacles: [{x:2, y:1}, {x:2, y:2}, {x:2, y:3}], theme: 'ocean', name: 'Fundo do Mar' },
+  { size: 6, start: {x:0, y:5}, target: {x:5, y:0}, obstacles: [{x:1, y:4}, {x:2, y:3}, {x:3, y:2}, {x:4, y:1}], theme: 'ocean', name: 'Fundo do Mar' },
+  
+  // MUNDO 4: Deserto Egípcio (Tons Amarelo/Areia, Alvo: Diamante)
+  { size: 6, start: {x:0, y:0}, target: {x:5, y:5}, obstacles: [{x:1, y:1}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}], theme: 'egypt', name: 'Deserto Egípcio' },
+  { size: 6, start: {x:0, y:5}, target: {x:5, y:5}, obstacles: [{x:2, y:5}, {x:2, y:4}, {x:2, y:3}, {x:4, y:5}, {x:4, y:4}, {x:4, y:3}], theme: 'egypt', name: 'Deserto Egípcio' },
+  { size: 6, start: {x:3, y:3}, target: {x:0, y:0}, obstacles: [{x:2, y:2}, {x:2, y:3}, {x:3, y:2}, {x:1, y:1}], theme: 'egypt', name: 'Deserto Egípcio' },
+  
+  // MUNDO 5: Espaço Sideral (Tons Escuros/Roxo, Alvo: Estrela Cadente)
+  { size: 6, start: {x:0, y:0}, target: {x:5, y:5}, obstacles: [{x:0, y:2}, {x:1, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}], theme: 'space', name: 'Espaço Sideral' },
+  { size: 6, start: {x:5, y:0}, target: {x:0, y:5}, obstacles: [{x:1, y:0}, {x:1, y:1}, {x:1, y:2}, {x:1, y:3}, {x:4, y:5}, {x:4, y:4}, {x:4, y:3}, {x:4, y:2}], theme: 'space', name: 'Espaço Sideral' },
+  { size: 6, start: {x:2, y:0}, target: {x:2, y:5}, obstacles: [{x:1, y:1}, {x:2, y:1}, {x:3, y:1}, {x:1, y:3}, {x:2, y:3}, {x:3, y:3}], theme: 'space', name: 'Espaço Sideral' }
+];
+
+const THEMES = {
+  'factory': { bg: '#8B4513', cellBg: '#DEB887', border: '#5C2E0B', target: '🔋', obs: ['🛢️', '⚙️'] },
+  'forest': { bg: '#228B22', cellBg: '#90EE90', border: '#006400', target: '🍎', obs: ['🌲', '🌳', '🪨'] },
+  'ocean': { bg: '#008B8B', cellBg: '#AFEEEE', border: '#000080', target: '⚓', obs: ['🪸', '🦈', '🐙'] },
+  'egypt': { bg: '#DAA520', cellBg: '#F5DEB3', border: '#8B6508', target: '💎', obs: ['🐪', '🧱', '🦂'] },
+  'space': { bg: '#2F4F4F', cellBg: '#708090', border: '#191970', target: '🌟', obs: ['☄️', '🪐', '👾'] }
+};
+
+let currentLevelIndex = (typeof getRobotLevel === 'function') ? getRobotLevel() : 0;
+// Segurança para não estourar o array
+if (currentLevelIndex >= LEVELS.length) currentLevelIndex = 0;
+
+let currentLevel;
 let robotPos = { x: 0, y: 0 };
-let batteryPos = { x: 3, y: 3 };
 let commands = [];
 let isExecuting = false;
 
@@ -64,14 +105,43 @@ function playErrorSound() {
   } catch(e){}
 }
 
-// Inicializa tabuleiro
+function loadLevel(index) {
+  currentLevel = LEVELS[index];
+  robotPos = { x: currentLevel.start.x, y: currentLevel.start.y };
+  commands = [];
+  isExecuting = false;
+  updateQueueDisplay();
+  
+  // Atualiza UI
+  levelHeader.textContent = `Fase ${index + 1} de 15: ${currentLevel.name}`;
+  
+  const theme = THEMES[currentLevel.theme];
+  board.style.gridTemplateColumns = `repeat(${currentLevel.size}, 60px)`;
+  board.style.gridTemplateRows = `repeat(${currentLevel.size}, 60px)`;
+  board.style.backgroundColor = theme.bg;
+  board.style.borderColor = theme.border;
+  
+  renderBoard();
+}
+
 function renderBoard() {
   board.innerHTML = '';
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
+  const theme = THEMES[currentLevel.theme];
+  
+  for (let y = 0; y < currentLevel.size; y++) {
+    for (let x = 0; x < currentLevel.size; x++) {
       const cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = `cell-${x}-${y}`;
+      cell.style.backgroundColor = theme.cellBg;
+      
+      // Verifica se é obstáculo estático
+      const isObs = currentLevel.obstacles.find(o => o.x === x && o.y === y);
+      if (isObs) {
+        const randomObs = theme.obs[Math.floor(Math.random() * theme.obs.length)];
+        cell.innerHTML = `<div class="obstacle">${randomObs}</div>`;
+      }
+      
       board.appendChild(cell);
     }
   }
@@ -79,16 +149,20 @@ function renderBoard() {
 }
 
 function updateEntities() {
-  // Limpa tudo
-  document.querySelectorAll('.cell').forEach(c => c.innerHTML = '');
+  // Limpa entidades dinâmicas (bateria e robô)
+  document.querySelectorAll('.robot, .target-item').forEach(el => el.remove());
   
-  // Desenha Bateria
-  const batCell = document.getElementById(`cell-${batteryPos.x}-${batteryPos.y}`);
-  if(batCell) batCell.innerHTML = '<div class="battery">🔋</div>';
+  const theme = THEMES[currentLevel.theme];
+  
+  // Desenha Alvo
+  const targetCell = document.getElementById(`cell-${currentLevel.target.x}-${currentLevel.target.y}`);
+  if (targetCell && !targetCell.querySelector('.target-item')) {
+    targetCell.innerHTML += `<div class="target-item" style="font-size:2.5rem; position:absolute;">${theme.target}</div>`;
+  }
   
   // Desenha Robô
   const robCell = document.getElementById(`cell-${robotPos.x}-${robotPos.y}`);
-  if(robCell) robCell.innerHTML += '<div class="robot">🤖</div>';
+  if (robCell) robCell.innerHTML += '<div class="robot" style="font-size:2.5rem; position:absolute;">🤖</div>';
 }
 
 function updateQueueDisplay() {
@@ -114,7 +188,7 @@ function updateQueueDisplay() {
 arrowBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     if (isExecuting) return;
-    if (commands.length >= 10) return; // Limite de comandos
+    if (commands.length >= 25) return; // Aumentado para labirintos maiores
     
     playBeepSound();
     commands.push(btn.dataset.dir);
@@ -127,19 +201,15 @@ btnClear.addEventListener('click', () => {
   playBeepSound(true);
   commands = [];
   updateQueueDisplay();
-  // Reseta a posicao
-  robotPos = { x: 0, y: 0 };
+  robotPos = { x: currentLevel.start.x, y: currentLevel.start.y };
   updateEntities();
 });
 
 btnPlay.addEventListener('click', () => {
   if (isExecuting || commands.length === 0) return;
   isExecuting = true;
-  
-  // Reseta para garantir
-  robotPos = { x: 0, y: 0 };
+  robotPos = { x: currentLevel.start.x, y: currentLevel.start.y };
   updateEntities();
-  
   executeCommand(0);
 });
 
@@ -150,7 +220,6 @@ function executeCommand(index) {
     return;
   }
   
-  // Destaca o comando atual
   document.querySelectorAll('.queue-item').forEach(el => el.classList.remove('active'));
   const currentItem = document.getElementById(`q-${index}`);
   if (currentItem) currentItem.classList.add('active');
@@ -164,37 +233,58 @@ function executeCommand(index) {
   if (cmd === 'LEFT') newX--;
   if (cmd === 'RIGHT') newX++;
   
-  // Verifica colisao com borda
-  if (newX < 0 || newX >= GRID_SIZE || newY < 0 || newY >= GRID_SIZE) {
-    playErrorSound();
-    isExecuting = false;
-    setTimeout(() => {
-      alert("BUM! O robô bateu na parede. Limpe a lista e tente de novo!");
-    }, 500);
+  // Colisão com Borda
+  if (newX < 0 || newX >= currentLevel.size || newY < 0 || newY >= currentLevel.size) {
+    triggerError("BUM! O robô bateu na parede da fase.");
     return;
   }
   
-  // Move
+  // Colisão com Obstáculo
+  const isObs = currentLevel.obstacles.find(o => o.x === newX && o.y === newY);
+  if (isObs) {
+    triggerError("Aiaiai! O robô bateu em um obstáculo.");
+    return;
+  }
+  
   playBeepSound(true);
   robotPos.x = newX;
   robotPos.y = newY;
   updateEntities();
   
-  // Vai para o proximo após um atraso
   setTimeout(() => {
     executeCommand(index + 1);
-  }, 600);
+  }, 400); // Mais rápido que antes
+}
+
+function triggerError(msg) {
+  playErrorSound();
+  isExecuting = false;
+  setTimeout(() => {
+    alert(msg + " Limpe a lista e tente de novo!");
+  }, 400);
 }
 
 function checkWin() {
-  if (robotPos.x === batteryPos.x && robotPos.y === batteryPos.y) {
+  if (robotPos.x === currentLevel.target.x && robotPos.y === currentLevel.target.y) {
     playWinSound();
-    if (typeof unlockStar === 'function') unlockStar('robot');
+    
     setTimeout(() => {
-      alert("BIP BOP! O Robô pegou a bateria! Você venceu!");
+      if (currentLevelIndex >= LEVELS.length - 1) {
+        // ZEROU O JOGO!
+        if (typeof unlockStar === 'function') unlockStar('robot');
+        alert("🎉 INCRÍVEL! Você completou TODAS as 15 Fases do Robô! A Estrela Final é sua!");
+        if (typeof setRobotLevel === 'function') setRobotLevel(0); // Reseta
+        loadLevel(0);
+      } else {
+        // Próxima fase
+        currentLevelIndex++;
+        if (typeof setRobotLevel === 'function') setRobotLevel(currentLevelIndex);
+        alert("BIP BOP! Você pegou o item! Vamos para a próxima fase!");
+        loadLevel(currentLevelIndex);
+      }
     }, 500);
   }
 }
 
-// Inicia
-renderBoard();
+// Inicia Jogo
+loadLevel(currentLevelIndex);

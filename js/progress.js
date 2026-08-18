@@ -19,7 +19,8 @@ function getProgress() {
     paint: false,
     desktop: false,
     browser: false,
-    robot: false
+    robot: false,
+    robot_level_current: 0 // Começa na fase 0 (Fase 1)
   };
 }
 
@@ -29,6 +30,16 @@ function saveProgress(progressObj) {
   } catch (e) {
     console.log("Erro ao salvar no LocalStorage", e);
   }
+}
+
+function getRobotLevel() {
+  return getProgress().robot_level_current || 0;
+}
+
+function setRobotLevel(levelIndex) {
+  const progress = getProgress();
+  progress.robot_level_current = levelIndex;
+  saveProgress(progress);
 }
 
 function unlockStar(gameId) {

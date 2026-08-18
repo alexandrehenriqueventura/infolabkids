@@ -8,18 +8,15 @@
   <style>
     .game-board {
       display: grid;
-      grid-template-columns: repeat(4, 80px);
-      grid-template-rows: repeat(4, 80px);
       gap: 5px;
-      background: #8B4513;
       padding: 10px;
       border-radius: 15px;
-      border: 8px solid #5C2E0B;
+      border: 8px solid;
       margin: 20px auto;
       width: max-content;
+      transition: all 0.5s ease;
     }
     .cell {
-      background: #DEB887;
       border-radius: 8px;
       display: flex;
       justify-content: center;
@@ -32,8 +29,11 @@
       transition: all 0.3s ease;
       z-index: 10;
     }
-    .battery {
+    .target-item {
       animation: pulse 1.5s infinite;
+    }
+    .obstacle {
+      font-size: 2.5rem;
     }
     @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
@@ -95,15 +95,27 @@
     .action-btns {
       margin-top: 20px;
     }
+    
+    #level-header {
+      background: white;
+      color: var(--text-dark);
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-family: 'Fredoka One', cursive;
+      border: 3px solid #ccc;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
-<body class="game-container">
+<body class="game-container" id="theme-body">
 
   <a href="menu.html" class="btn-kid btn-secondary btn-back">⬅ Voltar</a>
 
   <div style="text-align: center; margin-top: 10px;">
     <h1 class="logo-title" style="margin: 0; font-size: 2.2rem;">O Caminho do Robô 🤖</h1>
-    <p style="font-size: 1.1rem; font-weight: 700; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Programe os passos do robô para ele chegar na bateria (🔋).</p>
+    <div id="level-header">Fase 1 de 15: Fábrica</div>
+    <p style="font-size: 1.1rem; font-weight: 700; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Programe os passos do robô para ele chegar no objetivo!</p>
   </div>
 
   <div class="game-board" id="board">
