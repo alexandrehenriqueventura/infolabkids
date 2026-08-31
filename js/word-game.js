@@ -21,12 +21,30 @@ let words = [
 // Remove duplicatas por segurança
 words = [...new Set(words)];
 
-// Embaralha o array com algoritmo Fisher-Yates (mais eficiente e aleatório)
-for (let i = words.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [words[i], words[j]] = [words[j], words[i]];
+// Lógica de Dificuldade Progressiva:
+// 1. Separar palavras em grupos por tamanho (Fácil: 3-4, Médio: 5-6, Difícil: 7+)
+let easyWords = words.filter(w => w.length <= 4);
+let mediumWords = words.filter(w => w.length > 4 && w.length <= 6);
+let hardWords = words.filter(w => w.length > 6);
+
+// 2. Função genérica de embaralhamento (Fisher-Yates)
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
+// 3. Embaralha cada grupo individualmente
+easyWords = shuffleArray(easyWords);
+mediumWords = shuffleArray(mediumWords);
+hardWords = shuffleArray(hardWords);
+
+// 4. Junta os grupos: O jogo começará com as fáceis e ficará difícil com o tempo
+words = [...easyWords, ...mediumWords, ...hardWords];
+
+// Começa do índice 0 (sempre pelas palavras mais curtas)
 let currentWordIndex = 0;
 let currentLetterIndex = 0;
 let currentWord = "";
