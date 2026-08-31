@@ -20,6 +20,7 @@ function getProgress() {
     desktop: false,
     browser: false,
     robot: false,
+    puzzle: false,
     robot_level_current: 0 // Começa na fase 0 (Fase 1)
   };
 }
