@@ -18,8 +18,14 @@ let words = [
   "SAPATO", "TENIS", "MEIA", "CALCA", "BERMUDA", "SHORT", "SAIA", "VESTIDO", "BLUSA", "CAMISA", "CAMISETA", "CASACO", "BONE", "CHAPEU", "LUVA", "RELOGIO", "OCULOS", "COLAR", "ANEL"
 ];
 
-// Embaralha o array para que nunca seja a mesma ordem
-words.sort(() => Math.random() - 0.5);
+// Remove duplicatas por segurança
+words = [...new Set(words)];
+
+// Embaralha o array com algoritmo Fisher-Yates (mais eficiente e aleatório)
+for (let i = words.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [words[i], words[j]] = [words[j], words[i]];
+}
 
 let currentWordIndex = 0;
 let currentLetterIndex = 0;
