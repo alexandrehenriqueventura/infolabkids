@@ -1,4 +1,26 @@
-const words = ["GATO", "BOLA", "CASA", "SOL", "PATO", "LUZ", "MESA"];
+let words = [
+  // Animais
+  "GATO", "CACHORRO", "LEAO", "TIGRE", "URSO", "MACACO", "ELEFANTE", "GIRAFA", "ZEBRA", "CAVALO", "VACA", "PORCO", "OVELHA", "CABRA", "PATO", "GALINHA", "GALO", "PERU", "RATO", "SAPO", "JACARE", "COBRA", "PEIXE", "TUBARAO", "BALEIA", "GOLFINHO", "TARTARUGA", "POLVO", "LULA", "ABELHA", "FORMIGA", "BORBOLETA", "ARANHA", "MOSCA", "BESOURO", "JOANINHA", "PAPAGAIO", "ARARA", "CORUJA", "GAVIAO", "AGUIA", "PINGUIM",
+  
+  // Alimentos e Frutas
+  "AGUA", "SUCO", "LEITE", "BOLO", "PUDIM", "MACA", "BANANA", "PERA", "UVA", "LARANJA", "LIMAO", "ABACAXI", "MELANCIA", "MELAO", "MORANGO", "CEREJA", "AMORA", "GOIABA", "MANGA", "CAJU", "MARACUJA", "COCO", "ABACATE", "MAMAO", "TOMATE", "CEBOLA", "ALHO", "BATATA", "CENOURA", "BETERRABA", "BROCOLIS", "ALFACE", "ARROZ", "FEIJAO", "CARNE", "FRANGO", "OVO", "QUEIJO", "PRESUNTO", "PAO", "MACARRAO", "PIZZA", "SORVETE", "CHOCOLATE", "DOCE", "BALA", "PIRULITO",
+  
+  // Brinquedos e Transportes
+  "BOLA", "BONECA", "CARRINHO", "TREM", "AVIAO", "BARCO", "MOTO", "BICICLETA", "PATINETE", "SKATE", "PIPA", "DADO", "DOMINO", "XADREZ", "CARTA", "FOGUETE", "ONIBUS", "CAMINHAO", "HELICOPTERO", "TRATOR",
+  
+  // Natureza
+  "SOL", "LUA", "ESTRELA", "NUVEM", "CEU", "CHUVA", "VENTO", "NEVE", "GELO", "FOGO", "TERRA", "PEDRA", "PLANTA", "ARVORE", "FLOR", "FOLHA", "RAIZ", "MAR", "ONDA", "PRAIA", "AREIA", "RIO", "LAGO", "MONTANHA",
+  
+  // Casa e Objetos
+  "CASA", "PREDIO", "RUA", "PRACA", "PARQUE", "ESCOLA", "SALA", "QUARTO", "COZINHA", "BANHEIRO", "QUINTAL", "JARDIM", "PORTA", "JANELA", "PAREDE", "TETO", "CHAO", "TELHADO", "MESA", "CADEIRA", "CAMA", "SOFA", "ARMARIO", "GELADEIRA", "FOGAO", "TELEVISAO", "COMPUTADOR", "CELULAR", "TABLET", "LIVRO", "CADERNO", "LAPIS", "CANETA", "BORRACHA", "REGUA", "TESOURA", "COLA", "MOCHILA",
+  
+  // Vestuário
+  "SAPATO", "TENIS", "MEIA", "CALCA", "BERMUDA", "SHORT", "SAIA", "VESTIDO", "BLUSA", "CAMISA", "CAMISETA", "CASACO", "BONE", "CHAPEU", "LUVA", "RELOGIO", "OCULOS", "COLAR", "ANEL"
+];
+
+// Embaralha o array para que nunca seja a mesma ordem
+words.sort(() => Math.random() - 0.5);
+
 let currentWordIndex = 0;
 let currentLetterIndex = 0;
 let currentWord = "";
