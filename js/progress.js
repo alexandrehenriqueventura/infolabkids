@@ -21,6 +21,7 @@ function getProgress() {
     browser: false,
     robot: false,
     puzzle: false,
+    math: false,
     robot_level_current: 0 // Começa na fase 0 (Fase 1)
   };
 }

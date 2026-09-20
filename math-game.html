@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Batalha da Tabuada - InfoLab Kids</title>
+  <link rel="stylesheet" href="css/style.css?v=6">
+  <style>
+    .math-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto 0;
+      background: rgba(255,255,255,0.8);
+      padding: 15px 30px;
+      border-radius: 20px;
+      border: 4px solid var(--button-yellow);
+    }
+    .hearts {
+      font-size: 2rem;
+      letter-spacing: 5px;
+    }
+    .timer {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #e74c3c;
+    }
+    
+    .game-board {
+      background: white;
+      border: 8px solid var(--button-orange);
+      border-radius: 25px;
+      width: 90%;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .question-box {
+      font-size: 6rem;
+      font-family: 'Fredoka One', cursive;
+      color: var(--text-dark);
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .answer-input {
+      font-size: 5rem;
+      font-family: 'Fredoka One', cursive;
+      color: var(--button-blue);
+      border-bottom: 8px solid var(--button-blue);
+      min-width: 100px;
+      height: 100px;
+      display: inline-block;
+      text-align: center;
+      line-height: 100px;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .key-btn {
+      background: var(--button-blue);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 2.5rem;
+      font-family: 'Fredoka One', cursive;
+      padding: 20px 0;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #1e90ff;
+      transition: transform 0.1s;
+    }
+    .key-btn:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+    
+    .key-btn.btn-clear {
+      background: #e74c3c;
+      box-shadow: 0 6px 0 #c0392b;
+    }
+    .key-btn.btn-enter {
+      background: var(--grass-green);
+      box-shadow: 0 6px 0 #27ae60;
+    }
+
+    .shake {
+      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-5px, 0, 0); }
+      20%, 80% { transform: translate3d(5px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-10px, 0, 0); }
+      40%, 60% { transform: translate3d(10px, 0, 0); }
+    }
+
+    .flash-green {
+      animation: flashGreen 0.5s ease-out;
+    }
+    @keyframes flashGreen {
+      0% { background-color: #a8e6cf; }
+      100% { background-color: white; }
+    }
+    
+    .flash-red {
+      animation: flashRed 0.5s ease-out;
+    }
+    @keyframes flashRed {
+      0% { background-color: #ffcccb; }
+      100% { background-color: white; }
+    }
+
+    /* Tela de Início / Fim */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+    }
+    .modal h2 { font-size: 2.5rem; margin-bottom: 10px; }
+    .modal p { font-size: 1.2rem; margin-bottom: 20px; }
+  </style>
+</head>
+<body class="game-container">
+
+  <a href="menu.html" class="btn-kid btn-secondary btn-back">⬅ Voltar</a>
+
+  <div class="math-header" style="display: none;" id="game-ui-header">
+    <div class="hearts" id="hearts-display">❤️❤️❤️</div>
+    <div class="timer" id="timer-display">⏱️ 60s</div>
+    <div style="font-size: 1.5rem; font-weight: bold; color: var(--button-blue);">🎯 <span id="score-display">0</span>/10</div>
+  </div>
+
+  <div class="game-board" id="game-board" style="display: none;">
+    <div class="question-box">
+      <span id="num1">7</span>
+      <span style="color: var(--button-orange);">x</span>
+      <span id="num2">8</span>
+      <span>=</span>
+      <div class="answer-input" id="answer-input"></div>
+    </div>
+
+    <div class="keypad">
+      <button class="key-btn" onclick="pressKey(1)">1</button>
+      <button class="key-btn" onclick="pressKey(2)">2</button>
+      <button class="key-btn" onclick="pressKey(3)">3</button>
+      <button class="key-btn" onclick="pressKey(4)">4</button>
+      <button class="key-btn" onclick="pressKey(5)">5</button>
+      <button class="key-btn" onclick="pressKey(6)">6</button>
+      <button class="key-btn" onclick="pressKey(7)">7</button>
+      <button class="key-btn" onclick="pressKey(8)">8</button>
+      <button class="key-btn" onclick="pressKey(9)">9</button>
+      <button class="key-btn btn-clear" onclick="pressClear()">C</button>
+      <button class="key-btn" onclick="pressKey(0)">0</button>
+      <button class="key-btn btn-enter" onclick="checkAnswer()">✔</button>
+    </div>
+  </div>
+
+  <!-- Tela de Preparação -->
+  <div class="overlay" id="start-screen">
+    <div class="modal">
+      <h2>Batalha da Tabuada ⚔️</h2>
+      <p>Você tem <strong>60 segundos</strong> para acertar <strong>10 continhas</strong> e derrotar o chefão!</p>
+      <p style="font-size: 1rem; color: #555;">Se errar 3 vezes, você perde. As contas que errar voltarão depois!</p>
+      <button class="btn-kid" onclick="startGame()">▶️ Começar Batalha</button>
+    </div>
+  </div>
+
+  <!-- Tela de Resultado -->
+  <div class="overlay" id="result-screen" style="display: none;">
+    <div class="modal">
+      <h2 id="result-title">Vitória! 🏆</h2>
+      <p id="result-message">Você derrotou o chefão da matemática!</p>
+      <button class="btn-kid" onclick="resetGame()">🔄 Jogar Novamente</button>
+      <br><br>
+      <a href="menu.html" class="btn-kid btn-secondary">⬅ Voltar ao Menu</a>
+    </div>
+  </div>
+
+  <script src="js/progress.js?v=6"></script>
+  <script src="js/math-game.js"></script>
+</body>
+</html>
