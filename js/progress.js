@@ -22,7 +22,10 @@ function getProgress() {
     robot: false,
     puzzle: false,
     math: false,
-    robot_level_current: 0 // Começa na fase 0 (Fase 1)
+    robot_level_current: 0, // Começa na fase 0 (Fase 1)
+    coins: 0,
+    inventory: [], // IDs de itens comprados
+    equipped: null // ID do item equipado
   };
 }
 
@@ -44,14 +47,78 @@ function setRobotLevel(levelIndex) {
   saveProgress(progress);
 }
 
+function addCoins(amount) {
+  const progress = getProgress();
+  progress.coins = (progress.coins || 0) + amount;
+  saveProgress(progress);
+  
+  // Toca um sonzinho rápido de moeda
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1000, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(2000, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.2);
+  } catch(e){}
+}
+
+function spendCoins(amount) {
+  const progress = getProgress();
+  if ((progress.coins || 0) >= amount) {
+    progress.coins -= amount;
+    saveProgress(progress);
+    return true;
+  }
+  return false;
+}
+
 function unlockStar(gameId) {
   const progress = getProgress();
+  
+  // Sempre dá moedas ao finalizar um jogo!
+  addCoins(10);
+  
   if (!progress[gameId]) {
     progress[gameId] = true;
     saveProgress(progress);
     playStarSound();
     showStarAnimation();
+  } else {
+    // Mostra animação de moeda já que a estrela já foi pega
+    showCoinAnimation();
   }
+}
+
+function showCoinAnimation() {
+  const coin = document.createElement('div');
+  coin.innerHTML = '🪙 +10';
+  coin.style.position = 'fixed';
+  coin.style.top = '50%';
+  coin.style.left = '50%';
+  coin.style.transform = 'translate(-50%, -50%) scale(0)';
+  coin.style.fontSize = '4rem';
+  coin.style.color = 'gold';
+  coin.style.fontWeight = 'bold';
+  coin.style.zIndex = '9999';
+  coin.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+  coin.style.pointerEvents = 'none';
+  coin.style.textShadow = '0 5px 10px rgba(0,0,0,0.5)';
+  
+  document.body.appendChild(coin);
+  
+  setTimeout(() => coin.style.transform = 'translate(-50%, -50%) scale(1)', 10);
+  setTimeout(() => {
+    coin.style.transform = 'translate(-50%, -100px) scale(0)';
+    coin.style.opacity = '0';
+    setTimeout(() => coin.remove(), 500);
+  }, 1500);
 }
 
 // Efeitos visuais e sonoros ao ganhar estrela pela primeira vez

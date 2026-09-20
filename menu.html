@@ -3,69 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InfoLab Kids</title>
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <title>Trilha de Aventura - InfoLab Kids</title>
+  <link rel="stylesheet" href="css/style.css?v=7">
+  <style>
+    body {
+      background: #87CEEB;
+      overflow-x: hidden;
+    }
+    .header-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 5px solid var(--button-yellow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .stats {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      display: flex;
+      gap: 20px;
+    }
+    
+    .btn-store {
+      background: #9b59b6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      font-family: 'Fredoka One', cursive;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #8e44ad;
+      transition: 0.1s;
+    }
+    .btn-store:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .trail-container {
+      padding: 50px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      position: relative;
+      margin-bottom: 100px;
+    }
+    
+    /* A linha da trilha */
+    .trail-container::before {
+      content: '';
+      position: absolute;
+      top: 50px;
+      bottom: 50px;
+      left: 50%;
+      width: 10px;
+      background: #fff;
+      margin-left: -5px;
+      z-index: -1;
+      border-radius: 5px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .trail-node {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+    .trail-node:nth-child(odd) {
+      justify-content: flex-start;
+      text-align: right;
+    }
+    .trail-node:nth-child(even) {
+      justify-content: flex-end;
+      text-align: left;
+    }
+
+    .node-content {
+      width: 45%;
+      background: white;
+      padding: 15px;
+      border-radius: 20px;
+      border: 4px solid var(--primary-blue);
+      box-shadow: 0 10px 0 var(--secondary-blue);
+      text-decoration: none;
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: 0.2s;
+    }
+    .node-content:hover {
+      transform: translateY(-5px);
+    }
+    
+    .node-content.locked {
+      background: #ddd;
+      border-color: #aaa;
+      box-shadow: 0 10px 0 #999;
+      color: #777;
+      pointer-events: none;
+      filter: grayscale(100%);
+    }
+
+    .node-icon {
+      font-size: 3rem;
+    }
+    .node-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    /* Modal Loja */
+    .store-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .store-content {
+      background: white;
+      padding: 30px;
+      border-radius: 25px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+    }
+    .mascot-preview {
+      font-size: 6rem;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+    .mascot-accessory {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4rem;
+    }
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .store-item {
+      background: #f0f0f0;
+      border: 3px solid #ccc;
+      border-radius: 15px;
+      padding: 15px;
+      cursor: pointer;
+    }
+    .store-item.owned {
+      border-color: var(--grass-green);
+      background: #e0ffe0;
+    }
+    .store-item.equipped {
+      border-color: var(--button-yellow);
+      background: #fffacd;
+    }
+    .close-store {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-family: 'Fredoka One';
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
-  <a href="index.html" class="btn-kid btn-secondary btn-back">🏠 Início</a>
-
-  <div class="container">
-    <h1 class="logo-title">Bem-vindo ao InfoLab Kids! 🚀</h1>
-    <p style="font-size: 1.3rem; margin-bottom: 30px; font-weight: 700;">Aprenda a usar o computador brincando!</p>
-
-    <div id="stars-panel" style="background: rgba(255,255,255,0.8); border-radius: 20px; padding: 10px; margin-bottom: 20px; color: var(--text-dark); border: 3px solid var(--button-yellow); display: inline-block;">
-      <h3>Suas Estrelas: 0 ⭐</h3>
+  <div class="header-panel">
+    <a href="index.html" class="btn-kid btn-secondary" style="padding: 10px; font-size: 1rem;">🏠 Voltar</a>
+    <div class="stats">
+      <span id="star-count">0 ⭐</span>
+      <span id="coin-count" style="color: #f1c40f;">0 🪙</span>
     </div>
-    
-    <div class="menu-options">
-      <a href="mouse-game.html" class="btn-kid">
-        🖱️ Aprendendo a usar o Mouse
-      </a>
+    <button class="btn-store" onclick="openStore()">Lojinha 🛒</button>
+  </div>
+
+  <div class="trail-container" id="trail-container">
+    <!-- Gerado via JS -->
+  </div>
+
+  <div class="grass-footer" style="position: fixed; bottom: 0; width: 100%; height: 50px; background: var(--grass-green); z-index: -2;"></div>
+
+  <!-- Modal Loja -->
+  <div class="store-modal" id="store-modal">
+    <div class="store-content">
+      <h2>Loja do Mascote</h2>
+      <div class="mascot-preview">
+        🤖
+        <div class="mascot-accessory" id="mascot-acc"></div>
+      </div>
+      <p style="font-weight: 700; color: #f1c40f; font-size: 1.5rem;">Moedas: <span id="store-coins"></span> 🪙</p>
       
-      <a href="keyboard-game.html" class="btn-kid">
-        ⌨️ O Teclado: Letras e Números
-      </a>
-
-      <a href="word-game.html" class="btn-kid">
-        🚂 O Trem das Palavras (Teclado)
-      </a>
-
-      <a href="paint-game.html" class="btn-kid">
-        🎨 Estúdio de Pintura (Mouse Livre)
-      </a>
-
-      <a href="desktop-game.html" class="btn-kid">
-        🧹 Faxina no Computador (Duplo Clique)
-      </a>
-
-      <a href="puzzle-game.html" class="btn-kid" style="background-color: #ff6b81; box-shadow: 0 8px 0 #ff4757;">
-        🧩 Quebra-Cabeça (Arrastar)
-      </a>
-
-      <a href="browser-game.html" class="btn-kid" style="background-color: #9b59b6; box-shadow: 0 8px 0 #8e44ad;">
-        🌐 O Navegador Mágico (A Internet)
-      </a>
-
-      <a href="robot-game.html" class="btn-kid" style="background-color: #34495e; box-shadow: 0 8px 0 #2c3e50;">
-        🤖 Caminho do Robô (Lógica)
-      </a>
-
-      <a href="math-game.html" class="btn-kid" style="background-color: #e67e22; box-shadow: 0 8px 0 #d35400;">
-        ⚔️ Batalha da Tabuada (Teclado Numérico)
-      </a>
-
-      <a href="safety-tips.html" class="btn-kid btn-secondary">
-        🛡️ Dicas de Segurança
-      </a>
+      <div class="store-grid" id="store-grid">
+        <!-- Itens gerados via JS -->
+      </div>
+      
+      <button class="close-store" onclick="closeStore()">Fechar</button>
     </div>
   </div>
 
-  <div class="grass-footer"></div>
-  <script src="js/progress.js"></script>
+  <script src="js/progress.js?v=7"></script>
+  <script src="js/store.js"></script>
   <script>
+    const trailData = [
+      { id: 'mouse', title: 'Aprender o Mouse', icon: '🖱️', link: 'mouse-game.html', unlockReq: null },
+      { id: 'desktop', title: 'Faxina no PC', icon: '🧹', link: 'desktop-game.html', unlockReq: 'mouse' },
+      { id: 'puzzle', title: 'O Quebra-Cabeça', icon: '🧩', link: 'puzzle-game.html', unlockReq: 'desktop' },
+      { id: 'keyboard', title: 'O Teclado', icon: '⌨️', link: 'keyboard-game.html', unlockReq: 'puzzle' },
+      { id: 'word', title: 'Trem das Palavras', icon: '🚂', link: 'word-game.html', unlockReq: 'keyboard' },
+      { id: 'browser', title: 'Navegador Mágico', icon: '🌐', link: 'browser-game.html', unlockReq: 'word' },
+      { id: 'robot', title: 'Caminho do Robô', icon: '🤖', link: 'robot-game.html', unlockReq: 'browser' },
+      { id: 'math', title: 'Batalha da Tabuada', icon: '⚔️', link: 'math-game.html', unlockReq: 'robot' },
+      { id: 'paint', title: 'Estúdio de Pintura', icon: '🎨', link: 'paint-game.html', unlockReq: 'math' },
+      { id: 'safety', title: 'Dicas de Segurança', icon: '🛡️', link: 'safety-tips.html', unlockReq: null } // Sempre aberto
+    ];
+
+    function renderTrail() {
+      const container = document.getElementById('trail-container');
+      container.innerHTML = '';
+      
+      const progress = getProgress();
+      
+      trailData.forEach(node => {
+        const isLocked = node.unlockReq ? !progress[node.unlockReq] : false;
+        const isCompleted = progress[node.id];
+        
+        const nodeEl = document.createElement('div');
+        nodeEl.className = 'trail-node';
+        
+        let extraBadge = isCompleted ? '<div style="position:absolute; top:-10px; right:-10px; font-size:1.5rem;">⭐</div>' : '';
+        if (isLocked) extraBadge = '<div style="position:absolute; top:-10px; right:-10px; font-size:1.5rem;">🔒</div>';
+        
+        nodeEl.innerHTML = `
+          <a href="${isLocked ? '#' : node.link}" class="node-content ${isLocked ? 'locked' : ''}" style="position: relative;">
+            ${extraBadge}
+            <span class="node-icon">${node.icon}</span>
+            <span class="node-title">${node.title}</span>
+          </a>
+        `;
+        
+        container.appendChild(nodeEl);
+      });
+      
+      // Update stats
+      let stars = 0;
+      for (let k in progress) {
+        if (progress[k] && typeof progress[k] === 'boolean') stars++;
+      }
+      document.getElementById('star-count').innerText = `${stars} ⭐`;
+      document.getElementById('coin-count').innerText = `${progress.coins || 0} 🪙`;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      renderStarsPanel();
+      renderTrail();
+      if(typeof updateMascotPreview === 'function') updateMascotPreview();
     });
   </script>
 </body>
