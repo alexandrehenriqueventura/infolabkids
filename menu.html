@@ -52,78 +52,125 @@
     .trail-container {
       padding: 50px 20px;
       width: 100%;
-      max-width: 800px;
+      max-width: 600px; /* Mais estreito para a trilha ficar focada */
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      align-items: center; /* Centraliza tudo */
+      gap: 60px; /* Mais espaço entre os níveis */
       position: relative;
-      margin-bottom: 100px;
+      margin-bottom: 120px;
     }
     
-    /* A linha da trilha */
+    /* A linha da trilha (pontilhada ou grossa) */
     .trail-container::before {
       content: '';
       position: absolute;
-      top: 50px;
-      bottom: 50px;
+      top: 80px;
+      bottom: 80px;
       left: 50%;
-      width: 10px;
-      background: #fff;
-      margin-left: -5px;
+      width: 16px;
+      background: #dcdde1;
+      margin-left: -8px;
       z-index: -1;
-      border-radius: 5px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
     }
 
     .trail-node {
       display: flex;
-      align-items: center;
-      width: 100%;
-      position: relative;
-    }
-    .trail-node:nth-child(odd) {
-      justify-content: flex-start;
-      text-align: right;
-    }
-    .trail-node:nth-child(even) {
-      justify-content: flex-end;
-      text-align: left;
-    }
-
-    .node-content {
-      width: 45%;
-      background: white;
-      padding: 15px;
-      border-radius: 20px;
-      border: 4px solid var(--primary-blue);
-      box-shadow: 0 10px 0 var(--secondary-blue);
-      text-decoration: none;
-      color: var(--text-dark);
-      display: flex;
       flex-direction: column;
-      gap: 5px;
-      transition: 0.2s;
-    }
-    .node-content:hover {
-      transform: translateY(-5px);
+      align-items: center;
+      position: relative;
+      width: 100%;
     }
     
+    /* Zigue-zague com margens */
+    .trail-node:nth-child(odd) {
+      transform: translateX(-60px);
+    }
+    .trail-node:nth-child(even) {
+      transform: translateX(60px);
+    }
+
+    /* O botão principal circular (estilo Duolingo) */
+    .node-content {
+      width: 110px;
+      height: 110px;
+      background: var(--button-yellow);
+      border-radius: 50%;
+      border: 6px solid rgba(255,255,255,0.5);
+      box-shadow: 0 12px 0 var(--button-orange);
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* Cores variadas baseadas na posição */
+    .trail-node:nth-child(3n+1) .node-content:not(.locked) {
+      background: #4cd137; box-shadow: 0 12px 0 #44bd32;
+    }
+    .trail-node:nth-child(3n+2) .node-content:not(.locked) {
+      background: #00a8ff; box-shadow: 0 12px 0 #0097e6;
+    }
+    .trail-node:nth-child(3n+3) .node-content:not(.locked) {
+      background: #9c88ff; box-shadow: 0 12px 0 #8c7ae6;
+    }
+
+    .node-content:hover:not(.locked) {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 0 var(--button-orange);
+    }
+    .trail-node:nth-child(3n+1) .node-content:hover:not(.locked) { box-shadow: 0 20px 0 #44bd32; }
+    .trail-node:nth-child(3n+2) .node-content:hover:not(.locked) { box-shadow: 0 20px 0 #0097e6; }
+    .trail-node:nth-child(3n+3) .node-content:hover:not(.locked) { box-shadow: 0 20px 0 #8c7ae6; }
+    
+    .node-content:active:not(.locked) {
+      transform: translateY(12px);
+      box-shadow: 0 0 0 transparent !important;
+    }
+
     .node-content.locked {
-      background: #ddd;
-      border-color: #aaa;
-      box-shadow: 0 10px 0 #999;
-      color: #777;
-      pointer-events: none;
+      background: #e1b12c;
+      border-color: #f5f6fa;
+      box-shadow: 0 12px 0 #c23616;
       filter: grayscale(100%);
+      pointer-events: none;
+      opacity: 0.7;
     }
 
     .node-icon {
-      font-size: 3rem;
+      font-size: 3.5rem;
+      filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
     }
-    .node-title {
+    
+    /* Balão flutuante com o título da fase */
+    .node-title-bubble {
+      margin-top: 25px;
+      background: white;
+      padding: 8px 16px;
+      border-radius: 20px;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      border: 3px solid #f5f6fa;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 3;
+    }
+    
+    .node-title-bubble::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
     }
 
     /* Modal Loja */
@@ -259,11 +306,11 @@
         if (isLocked) extraBadge = '<div style="position:absolute; top:-10px; right:-10px; font-size:1.5rem;">🔒</div>';
         
         nodeEl.innerHTML = `
-          <a href="${isLocked ? '#' : node.link}" class="node-content ${isLocked ? 'locked' : ''}" style="position: relative;">
+          <a href="${isLocked ? '#' : node.link}" class="node-content ${isLocked ? 'locked' : ''}">
             ${extraBadge}
             <span class="node-icon">${node.icon}</span>
-            <span class="node-title">${node.title}</span>
           </a>
+          <div class="node-title-bubble">${node.title}</div>
         `;
         
         container.appendChild(nodeEl);
